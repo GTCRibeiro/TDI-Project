@@ -7,7 +7,6 @@ const mapDispatchToProps = dispatch => {
     return {
         deleteArticle: article => dispatch(deleteArticle(article)),
         fetchArticles: () => dispatch(fetchArticles())
-
     };
 };
 
@@ -29,48 +28,65 @@ class ConnectedList extends Component{
 
     componentDidMount()
     {
-
-        this.props.fetchArticles({type: 'FETCH_ARTICLES'});
+        if(this.props.articles.length < 1) {
+            this.props.fetchArticles({type: 'FETCH_ARTICLES'});
+        }
     }
 
 
     render()
     {
-        const articles = this.props.articles.articles;
-        const image = `http://localhost:81/tdi/api-ssj2/app/`;
+        console.log(this.props);
 
-
+        const articles = this.props.articles;
+        const imgComponent = {
+            width: "66%",
+            height: "66%%",
+            margin: "0px 15px 0px 15px"
+        };
+        const divComponent = {
+            overflow: "hidden"
+        };
+        const btnComponent = {
+            margin:"0px 0px 0px 0px"
+        };
         return (
-            <ul className="list-group list-group-flush">
-                {articles.map((el) => (
-                    <li className="list-group-item" key={el.id} >
-                        Review Title: {el.title}
+            <div className="card-columns">
+
+                {articles.map((el, index) => (
+
+                    <div className="card border-dark text-center w-100 " style={divComponent}  key={index}>
+                        <img src={el.image} className="card-img-top"  />
+                        <div className="card-header">{el.game.name} </div>
+
+
+
+
                         <br></br>
-                        Game: {el.name}
+                        {el.title}
                         <br></br>
-                        Prefácio: {el.description}
+
                         <br></br>
-                        Review: {el.review}
-                        <br></br>
-                        <img src={image + el.image}/>
-                        <br></br>
-                        <Link to={ `/review/${el.id}` }><button>Ver mais</button></Link>
-                        <button className="btn btn-danger btn-lg" onClick={() => this.clickAction(el)}>delete</button>
-                    </li>
+
+
+
+                        <Link to={ `/review/${el.id}` }><button className="btn btn-primary btn-lg" style={btnComponent}>Read more</button></Link>
+
+                        <div className="card-footer">
+                            <small className="text-muted"> {el.user.name} </small>
+                        </div>
+
+                    </div>
+
                 ))}
-            </ul>
+
+
+            </div>
         );
     }
 }
-/*const ConnectedList = ({articles}) => (
-    <ul className="list-group list-group-flush">
-        {articles.map(el => (
-            <li className="list-group-item" key={el.id}>
-                {el.title}
-            </li>
-        ))}
-    </ul>
-);*/
+//<button onClick={() => this.clickAction(el)} className="btn btn-danger btn-lg" style={btnComponent}>delete</button>
+
 
 const List = connect(mapStateToProps, mapDispatchToProps)(ConnectedList);
 

@@ -1,30 +1,27 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import createSagaMiddleware from 'redux-saga';
 
-// importar os reducers da aplicação
-import index from "../reducers/index";
-//import auth from "../reducers/auth";
-//import user from "../reducers/user";
+import articles from "../reducers/index";
+import auth from "../reducers/token";
+import user from "../reducers/user";
+import genres from "../reducers/genres";
+import games from "../reducers/games";
+import genresGames from "../reducers/genresGames";
 
-// importar os sagas da aplicação
-//import rootSaga from "../sagas/saga";
+import rootSaga from "../sagas/rootSaga";
 
 
-// inicializar o saga Middleware
 const sagaMiddleware = createSagaMiddleware();
 
-// criar a store do Redux
 const store = createStore(
-    // caso exista mais do que 1 reducer, usar esta função para "combiná-los"
+
     combineReducers({
-        index
-        //auth, user
+        articles, auth, user, genres, games,
     }),
-    // associar o saga à store do Redux
     applyMiddleware(sagaMiddleware)
 );
 
-// executar o middleware sagas
-sagaMiddleware.run(index);
+sagaMiddleware.run(rootSaga);
 
 export default store;
+

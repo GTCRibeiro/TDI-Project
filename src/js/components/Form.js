@@ -1,9 +1,8 @@
-// src/js/components/Form.js
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import { addArticle } from "../actions/index";
-
+import Redirect from "react-router-dom/es/Redirect";
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -18,7 +17,10 @@ class ConnectedForm extends Component {
             name: "",
             review: "",
             description: "",
-            title: ""
+            title: "",
+            image: "",
+            id: "",
+            render: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -31,66 +33,103 @@ class ConnectedForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+
+        const {image} = this.stxate;
         const { name } = this.state;
         const { description} = this.state;
         const { review } = this.state;
         const { title } = this.state;
+        if((this.state.title).length > 1 && (this.state.name).length > 1 && (this.state.description).length > 1 && (this.state.review).length > 1 && (this.state.image).length > 1) {
 
-        const id = uuidv1();
-        this.props.addArticle({ name, review, description, title, id });
-        this.setState({ name: "" });
-        this.setState({description: ""});
-        this.setState({review: ""});
-        this.setState({title: ""});
+            const id = uuidv1();
 
+            this.props.addArticle({name, review, description, title, id, image});
+
+            this.setState({name: ""});
+            this.setState({description: ""});
+            this.setState({review: ""});
+            this.setState({title: ""});
+            this.setState({id: id});
+            this.setState({image: ""});
+
+            this.setState({render:true});
+        }
     }
 
     render() {
+        if(this.state.render === true){
+            return <Redirect push to="/"/>;
+        }
+
         const { name } = this.state;
         const {review} = this.state;
         const {description} = this.state;
         const {title} = this.state;
+        const {image} = this.state;
+
+        const labelComponent = {
+            margin:"25px 0px 0px 0px"
+        };
+        const divComponent = {
+            margin: "80px 0px 0px 150px"
+        };
 
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="title">Title</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="title"
-                        value={title}
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        value={name}
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="description"
-                        value={description}
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="review"
-                        value={review}
-                        onChange={this.handleChange}
-                    />
+            <div className="col-md-4 offset-md-1" style={divComponent}>
+                <h2>Add a new Review</h2>
+                <br></br> <br></br> <br></br>
 
 
-
-                </div>
-                <button type="submit" className="btn btn-success btn-lg" >
-                    SAVE
-                </button>
-            </form>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <label style={labelComponent} htmlFor="title">Title</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="title"
+                            value={title}
+                            onChange={this.handleChange}
+                        />
+                        <label style={labelComponent} htmlFor="name">Game Name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="name"
+                            value={name}
+                            onChange={this.handleChange}
+                        />
+                        <label style={labelComponent} htmlFor="preface">Preface</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="description"
+                            value={description}
+                            onChange={this.handleChange}
+                        />
+                        <label style={labelComponent} htmlFor="name">Review text</label>
+                        <textarea
+                            rows="4"
+                            className="form-control"
+                            id="review"
+                            value={review}
+                            onChange={this.handleChange}
+                        />
+                        <label style={labelComponent} htmlFor="image">Image Link</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="image"
+                            value={image}
+                            onChange={this.handleChange}
+                        />
+                    </div>
+                    <a href={this.state.id}>
+                        <button type="submit" className="btn btn-success btn-lg">
+                            SAVE
+                        </button>
+                    </a>
+                </form>
+            </div>
         );
     }
 }

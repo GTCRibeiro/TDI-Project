@@ -4,12 +4,12 @@ import { Provider } from "react-redux";
 import store from "./store/index";
 import App from "./components/App";
 
+import Navbar from "./components/Navbar";
+
 //import createSagaMiddleware from 'redux-saga';
 
 render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <Navbar store={store}/>,
     document.getElementById("app")
 );
 

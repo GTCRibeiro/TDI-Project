@@ -1,42 +1,59 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Provider } from "react-redux";
-import store from "../store/index";
 import App from "./App";
-import MasterDetail from "./MasterDetail";
-import Callback from "./Callback";
+import Detail from "./MasterDetail";
 import User from "./User";
+import Form from "./Form";
+import ListGenres from "./ListGenres";
+import DetailGenre from "./MasterDetailGenres";
+import ListGenreGames from "./ListGenreGames";
+import Callback from "./Callback";
 
-// Este é o Componente Base da aplicação onde vão ser carregados os dois "sub-componentes" List e Form
+const spanComponent = {
+    display: "inline"
+};
 
 const Navbar = ({ store }) => (
     <Provider store={store}>
         <Router>
-            <div>
-                <nav>
+            <div >
+                <nav className="navbar sticky-top -expand -lg navbar-dark bg-dark">
                     <ul>
-                        <li>
+                        <li className="navbar-brand">
                             <Link to="/">Home</Link>
                         </li>
-                        <li>
-                            <Link to="/users/">Users</Link>
+
+                        <li className="navbar-brand">
+                            <Link to="/newReview">New Review</Link>
                         </li>
+                        <li className="navbar-brand">
+                            <Link to="/genres">Genres</Link>
+                        </li>
+                        <User />
 
-
-                    </ul>
+                    </ul >
+                    <span className="navbar-text" style={spanComponent}> Reviews&Reviews </span>
                 </nav>
 
                 <Route path="/" exact component={App} />
 
-                <Route path="/review/:id" component={MasterDetail} />
+                <Route path="/review/:id" component={Detail} />
 
-                {/* Route que irá obter a resposta do Laravel (api) com o código para pedir o access token  */}
+                <Route path="/genre/:id" component={DetailGenre} />
 
+                <Route path="/game/:id/reviews" component={ListGenreGames} />
+
+                <Route path="/newReview" component={Form}/>
+
+                <Route path="/genres" component={ListGenres}/>
+
+                <Route path="/callback" component={Callback} />
 
             </div>
         </Router>
     </Provider>
-)
-// <Route path="/callback" component={Callback} />
+);
+
 
 export default Navbar;
